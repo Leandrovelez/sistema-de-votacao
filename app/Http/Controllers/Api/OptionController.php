@@ -5,9 +5,19 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Option;
+use App\Interfaces\Option\OptionRepositoryInterface;
+use App\Http\Requests\Option\CreateOptionRequest;
+use App\Http\Requests\Option\UpdateOptionRequest;
 
 class OptionController extends Controller
 {
+    private $optionRepository;
+
+    public function __construct(OptionRepositoryInterface $optionRepositoryInterface) 
+    {
+        $this->optionRepository = $optionRepositoryInterface;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,8 +25,7 @@ class OptionController extends Controller
      */
     public function index()
     {
-        $options = Option::all();
-
+        $options = $this->optionRepository->getAllOptions();
         return response()->json($options);
     }
 
@@ -38,11 +47,7 @@ class OptionController extends Controller
      */
     public function store(Request $request)
     {
-        $option = new Option;
-        $option->vote_id = $request->vote_id;
-        $option->content = $request->content;
-        $option->save();
-
+        $option = $this->optionRepository->createOption($request);
         return response()->json($option);
     }
 
@@ -54,8 +59,7 @@ class OptionController extends Controller
      */
     public function show($id)
     {
-        $option = Option::find($id);
-
+        $option = $this->optionRepository->getOptionById($id);
         return response()->json($option);
     }
 
@@ -73,17 +77,13 @@ class OptionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\UpdateOptionRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateOptionRequest $request, $id)
     {
-        $option = Option::find($id);
-        $option->vote_id = $request->vote_id;
-        $option->content = $request->content;
-        $option->save();
-
+        $option = $this->optionRepository->updateOption($id, $request);
         return response()->json($option);
     }
 
@@ -95,9 +95,7 @@ class OptionController extends Controller
      */
     public function destroy($id)
     {
-        $option = Option::find($id);
-        $option->delete();
-
+        $option = $this->optionRepository->deleteOption($id);
         return response()->json($option);
     }
 }

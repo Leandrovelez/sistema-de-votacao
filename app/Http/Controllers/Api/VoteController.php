@@ -3,12 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Vote\CreateVoteRequest;
+use App\Http\Requests\Vote\UpdateVoteRequest;
+use App\Interfaces\Vote\VoteRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Models\Vote;
 use Carbon\Carbon;
 
 class VoteController extends Controller
 {
+    private $voteRepository;
+
+    public function __construct(VoteRepositoryInterface $voteRepositoryInterface) 
+    {
+        $this->voteRepository = $voteRepositoryInterface;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +26,7 @@ class VoteController extends Controller
      */
     public function index()
     {
-        $vote = Vote::all();
+        $vote = $this->voteRepository->getAllVotes();
         return response()->json($vote);
     }
 
@@ -33,17 +43,12 @@ class VoteController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\CreateVoteRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateVoteRequest $request)
     {
-        $vote = new Vote;
-        $vote->title = $request->title;
-        $vote->start_date = $request->start_date;
-        $vote->end_date = $request->end_date;
-        $vote->save();
-
+        $vote = $this->voteRepository->createVote($request);
         return response()->json($vote);
     }
 
@@ -55,8 +60,7 @@ class VoteController extends Controller
      */
     public function show($id)
     {
-        $vote = Vote::with('options')->find($id);
-
+        $vote = $this->voteRepository->getVoteById($id);
         return response()->json($vote);
     }
 
@@ -74,18 +78,13 @@ class VoteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\UpdateVoteRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateVoteRequest $request, $id)
     {
-        $vote = Vote::find($id);
-        $vote->title = $request->title;
-        $vote->start_date = $request->start_date;
-        $vote->end_date = $request->end_date;
-        $vote->save();
-
+        $vote = $this->voteRepository->updateVote($id, $request);
         return response()->json($vote);
     }
 
@@ -97,9 +96,7 @@ class VoteController extends Controller
      */
     public function destroy($id)
     {
-        $vote = Vote::find($id);
-        $vote->delete();
-
+        $vote = $this->voteRepository->deleteVote($id);
         return response()->json($vote);
     }
 }
