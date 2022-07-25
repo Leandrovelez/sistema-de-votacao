@@ -25,7 +25,7 @@ class Vote extends Model
      */
     public function getStartDateAttribute($value)
     {
-        return Carbon::parse($value)->format('d-m-Y H:i');
+        return Carbon::parse($value)->format('Y-m-d');
     }
 
     /**
@@ -36,29 +36,53 @@ class Vote extends Model
      */
     public function getEndDateAttribute($value)
     {
-        return Carbon::parse($value)->format('d-m-Y H:i');
+        return Carbon::parse($value)->format('Y-m-d');
     }
 
     /**
-     * Format the start_date.
+     * Format the start_time.
      *
      * @param  string  $value
      * @return string
      */
-    public function setStartDateAttribute($value)
+    public function getStartTimeAttribute($value)
     {
-        $this->attributes['start_date'] = Carbon::createFromFormat('d/m/Y H:i', $value);
+        return Carbon::parse($value)->format('H:i');
     }
 
     /**
-     * Format the end_date.
+     * Format the end_time.
      *
      * @param  string  $value
      * @return string
      */
-    public function setEndDateAttribute($value)
+    public function getEndTimeAttribute($value)
     {
-        $this->attributes['end_date'] = Carbon::createFromFormat('d/m/Y H:i', $value);
+        return Carbon::parse($value)->format('H:i');
+    }
+
+    
+
+    /**
+     * Format the start_time.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setStartTimeAttribute($value)
+    {
+        $this->attributes['start_time'] = Carbon::createFromFormat('H:i', $value);
+    }
+
+    /**
+     * Format the end_time.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setEndTimeAttribute($value)
+    {
+        $this->attributes['end_time'] = Carbon::createFromFormat('H:i', $value);
     }
 
 }

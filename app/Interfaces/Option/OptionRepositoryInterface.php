@@ -5,8 +5,8 @@ namespace App\Interfaces\Option;
 interface OptionRepositoryInterface 
 {
     public function getAllOptions();
-    public function getOptionById($optionId);
+    public function getOptionsByVoteId($voteId);
     public function deleteOption($optionId);
-    public function createOption($optionDetails);
-    public function updateOption($optionId, $newDetails);
+    public function createOption($voteId, $options);
+    public function updateOption($voteId, $newDetails);
 }

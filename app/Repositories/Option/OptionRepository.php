@@ -12,28 +12,29 @@ class OptionRepository implements OptionRepositoryInterface
         return Option::all();
     }
 
-    public function getOptionById($optionId) 
+    public function getOptionsByVoteId($voteId) 
     {
-        return Option::findOrFail($optionId);
+        $options = Option::where('vote_id', $voteId)->get();
+        return $options;
     }
 
-    public function createOption($optionDetails) 
+    public function createOption($voteId, $options) 
     {
-        $option = new Option;
-        $option->vote_id = $optionDetails->vote_id;
-        $option->content = $optionDetails->content;
-        $option->save();
-
-        return $option;
+        foreach($options as $op){
+            Option::create([
+                'vote_id' => $voteId,
+                'content' => $op
+            ]);
+        }
     }
 
-    public function updateOption($optionId, $newDetails) 
+    public function updateOption($voteId, $newDetails) 
     {
-        $option = Option::find($optionId);
-        $option->vote_id = $newDetails->vote_id;
-        $option->content = $newDetails->content;
-        $option->save();
-
+        $option = Option::where('vote_id', $voteId)->get();
+        foreach($option as $key => $newOption){
+            $newOption->update(['content' => $newDetails[$key]]);
+        }
+        
         return $option;
     }
     

@@ -8,5 +8,5 @@ interface VoteRepositoryInterface
     public function getVoteById($voteId);
     public function deleteVote($voteId);
     public function createVote($voteDetails);
-    public function updateVote($voteId, $newDetails);
+    public function updateVote($newDetails);
 }
