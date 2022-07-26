@@ -51,12 +51,22 @@ class VoteController extends Controller
      * @param  \Illuminate\Http\CreateVoteRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateVoteRequest $request)
     {
+        $request->flash();
+        $nullArray = [null];
+        if(count(array_diff($request->option, $nullArray)) < 3){
+            return redirect()->back()->withErrors(['msg' => 'Cadastre ao menos 3 opções de resposta!'])->withInput();
+        }
+        if(in_array(null, $request->option, true)){
+            return redirect()->back()->withErrors(['msg' => 'A opção de resposta não pode ser vazia!'])->withInput();
+        }
+
         $options = $request->option;
+        
         $vote = $this->voteRepository->createVote($request);
         $option = $this->optionRepository->createOption($vote->id, $options);
-        return view('vote.create');
+        return redirect()->route('vote.index')->with('success', 'Votação cadastrada com sucesso!');
     }
 
     /**
@@ -93,12 +103,21 @@ class VoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(UpdateVoteRequest $request)
     { 
+        $nullArray = [null];
+        if(count(array_diff($request->option, $nullArray)) < 3){
+            return redirect()->back()->withErrors(['msg' => 'Cadastre ao menos 3 opções de resposta!']);
+        }
+        if(in_array(null, $request->option, true)){
+            return redirect()->back()->withErrors(['msg' => 'A opção de resposta não pode ser vazia!'])->withInput();
+        }
+        
         $vote = $this->voteRepository->updateVote($request);
         $options = $request->option;
         $option = $this->optionRepository->updateOption($vote->id, $options);
-        return redirect()->route('vote.index');
+        
+        return redirect()->route('vote.index')->with('success', 'Votação atualizada com sucesso!');
     }
 
     /**
@@ -110,7 +129,7 @@ class VoteController extends Controller
     public function destroy($id)
     {
         $vote = $this->voteRepository->deleteVote($id);
-        return redirect()->route('vote.index');
+        return redirect()->route('vote.index')->with('success', 'Votação deletada com sucesso!');
     }
 
     /**

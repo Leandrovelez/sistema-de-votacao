@@ -12,7 +12,7 @@
     <title>{{$vote->title}}</title>
 </head>
 <body>
-    <header>
+    <header class="title">
         <h1>{{$vote->title}}</h1>
         <h2>{{$vote->question}}</h2>
         <?php
@@ -33,7 +33,7 @@
             <div class="content">
                 <card class="card-option">
                     <label>{{$option->content}}</label>
-                    <small>{{ isset($answers[$option->id]) ? $answers[$option->id] : 0 }} votos</small>
+                    <small id="votesCount">{{ isset($answers[$option->id]) ? $answers[$option->id] : 0 }} votos</small>
                 </card>
             </div>
         @endforeach
@@ -109,7 +109,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Excluir votação</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span class="modal-close" aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -140,6 +140,14 @@
         body header h1, h2, small{
             justify-content: center;
             display: flex;
+        }
+
+        .title {
+            margin-top: 32px;
+            margin-bottom: 24px;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
         }
 
         .container {
@@ -243,6 +251,10 @@
         .modal-header, .modal-footer{
             border: none;
         }
+ 
+        .modal-close {
+            color: white;
+        }
 
         .row{
             width: 100%;
@@ -253,6 +265,7 @@
         $('#deleteModal').on('shown.bs.modal', function () {
             $('#myInput').trigger('focus')
         })
+
     </script>
 </body>
 </html>

@@ -5,15 +5,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/8d70dac4bc.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <title>Editar votação</title>
 </head>
 <body>
-    <header>
+    <header class="title">
         <h1>
             Editar votação 
         </h1>
     </header>
     <div class="container">
+        
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ $error }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endforeach
+        @endif
         <div class="back">
             <button class="return-button" onClick="(location.href='{{route('vote.show', $vote->id)}}')">
                 <i class="fa-solid fa-arrow-left-long"></i>
@@ -57,7 +71,7 @@
             
             <div id="options">
                 @foreach($options as $option)
-                    <input type="text" name="option[]" value="{{$option->content}}"><br>
+                    <input type="text" name="option[{{$option->id}}]" value="{{$option->content}}"><br>
                 @endforeach
             </div>
             <div class="add-option" onclick="addOption()">Adicionar opção</div>
@@ -83,6 +97,13 @@
 
         label {
             color: #AAAAAA;
+        }
+        
+        .title {
+            margin-top: 32px;
+            margin-bottom: 24px;
+            justify-content: center;
+            display: flex;
         }
 
         .container {

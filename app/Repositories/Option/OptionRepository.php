@@ -30,11 +30,13 @@ class OptionRepository implements OptionRepositoryInterface
 
     public function updateOption($voteId, $newDetails) 
     {
-        $option = Option::where('vote_id', $voteId)->get();
-        foreach($option as $key => $newOption){
-            $newOption->update(['content' => $newDetails[$key]]);
+        //dd($newDetails);
+        foreach($newDetails as $key => $newOption){
+            $option = Option::updateOrCreate(
+                ['id' => $key, 'vote_id' => $voteId],
+                ['vote_id' => $voteId, 'content' => $newDetails[$key]]
+            );
         }
-        
         return $option;
     }
     

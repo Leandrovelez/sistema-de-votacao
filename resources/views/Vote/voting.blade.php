@@ -10,7 +10,7 @@
     <title>{{$vote->title}}</title>
 </head>
 <body>
-    <header>
+    <header class="title">
         <h1>{{$vote->title}}</h1>
         <h2>{{$vote->question}}</h2>
     </header>
@@ -55,6 +55,14 @@
         body header h1, h2, small{
             justify-content: center;
             display: flex;
+        }
+        
+        .title {
+            margin-top: 32px;
+            margin-bottom: 24px;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
         }
 
         .container form .div-option{

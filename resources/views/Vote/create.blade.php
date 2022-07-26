@@ -5,15 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/8d70dac4bc.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <title>Criar votação</title>
 </head>
 <body>
-    <header>
+    <header class="title">
         <h1>
             Criar votação
         </h1>
     </header>
     <div class="container">
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ $error }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endforeach
+        @endif
         <div class="back">
             <button class="return-button" onClick="(location.href='{{route('vote.index')}}')">
                 <i class="fa-solid fa-arrow-left-long"></i>
@@ -24,29 +37,29 @@
             @csrf
 
             <label for="title">Título:</label><br>
-            <input type="text" name="title" placeholder="Título"><br>
+            <input type="text" name="title" placeholder="Título" value="{{ old('title') }}"><br>
 
             <label for="question">Pergunta:</label><br>
-            <input type="text" name="question" placeholder="Pergunta"><br>
+            <input type="text" name="question" placeholder="Pergunta" value="{{ old('question') }}"><br>
 
             <div class="datetime-block">
                 <div class="label">
                     <label for="start_date">Data de início:</label><br>
-                    <input type="date" name="start_date">
+                    <input type="date" name="start_date" value="{{ old('start_date') }}">
                 </div>
                 
                 <div class="label">
                     <label for="start_date">Data de término:</label>
-                    <input type="date" name="end_date">
+                    <input type="date" name="end_date" value="{{ old('end_date') }}">
                 </div>
                 <div class="label">
                     <label for="start_date">Hora de início:</label>
-                    <input type="time" name="start_time">
+                    <input type="time" name="start_time" value="{{ old('start_time') }}">
                 </div>
                 
                 <div class="label">
                     <label for="start_date">Hora de término:</label>
-                    <input type="time" name="end_time">
+                    <input type="time" name="end_time" value="{{ old('end_time') }}">
                 </div>
             </div>
             
@@ -55,12 +68,14 @@
             </div>
             
             <div id="options">
-                <input type="text" name="option[]" placeholder="Opção 1"><br>
-                <input type="text" name="option[]" placeholder="Opção 2"><br>
-                <input type="text" name="option[]" placeholder="Opção 3"><br>
+                <input type="text" name="option[]" placeholder="Opção 1" value="{{ old('option[0]') }}"><br>
+                <input type="text" name="option[]" placeholder="Opção 2" value="{{ old('option[1]') }}"><br>
+                <input type="text" name="option[]" placeholder="Opção 3" value="{{ old('option[2]') }}"><br>
             </div>
 
-            <div class="add-option" onclick="addOption()">Adicionar opção</div>
+            <div class="add-option" onclick="addOption()">
+                <i class="fa-solid fa-plus"></i> Adicionar opção
+            </div>
             <input type="submit" value="Salvar" class="send">
         </form>
     </div>
@@ -83,6 +98,13 @@
 
         label {
             color: #AAAAAA;
+        }
+
+        .title {
+            margin-top: 32px;
+            margin-bottom: 24px;
+            justify-content: center;
+            display: flex;
         }
 
         .container {
@@ -196,6 +218,11 @@
             font-size: 16px;
             justify-content: center;
             display: flex;
+            align-items: center;
+        }
+
+        .add-option i{
+            margin-right: 4px;
         }
 
         .container form .add-option:hover{

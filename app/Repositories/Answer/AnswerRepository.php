@@ -41,17 +41,15 @@ class AnswerRepository implements AnswerRepositoryInterface
 
     public function getAnswersByVoteId($voteId){
         $answersCount = [];
-        //$answers = Answer::where('vote_id', $voteId)->select(DB::raw('answers.option_id, COUNT(option_id) as option_count'))->get();
         $answers = Answer::select(array('option_id', DB::raw('COUNT(option_id) as option_count')))
             ->where('vote_id', $voteId)
             ->groupBy('option_id')
             ->get();
-        //indice = vote_id, value = count options
-        //dd($answers);
+        
         foreach($answers as $answer){
             $answersCount[$answer->option_id] = $answer->option_count;
         }
-        //dd($answersCount);
+        
         return $answersCount;
     }
 }

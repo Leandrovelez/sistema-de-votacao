@@ -16,7 +16,7 @@ class CreateVoteRequest extends FormRequest
         return true;
     }
 
-    /**
+   /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -25,8 +25,11 @@ class CreateVoteRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
-            'start_date' => 'required|date_format:d/m/Y H:i',
-            'end_date' => 'required|date_format:d/m/Y H:i',
+            'question' => 'required|string',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
         ];
     }
 
@@ -39,10 +42,12 @@ class CreateVoteRequest extends FormRequest
         return [
             'title.required' => 'O título não pode ser vazio',
             'title.string' => 'O título deve ser um texto',
+            'question.required' => 'A pergunta não pode ser vazia',
+            'question.string' => 'A pergunta deve ser um texto',
             'start_date.required' => 'A data de ínicio não poder ser vazia',
-            'start_date.date' => 'A data de ínicio deve conter data e hora',
             'end_date.required' => 'A data de término não pode ser vazia',
-            'end_date.date' => 'A data de término deve conter data e hora',
+            'start_time.required' => 'A hora de ínicio não poder ser vazia',
+            'end_time.required' => 'A hora de término não pode ser vazia',
         ];
     }
 }

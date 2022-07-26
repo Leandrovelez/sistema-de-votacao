@@ -6,18 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/8d70dac4bc.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https: //fonts.googleapis.com/css2? family= Roboto:ital,wght@0,400;0,500;1,700 & display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Votação</title>
 </head>
 <body>
+    <header class="title">
+        <strong class="text-4xl">Votações</strong>
+    </header>
     <div class="container">
-        <header class="title">
-            <h1>Votações</h1>
-        </header>
+
+        @if (\Session::has('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {!! \Session::get('success') !!}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
         
-        <button type='button' onClick="(location.href='{{route('vote.create')}}')">Criar nova votação</button>
+        <button class="newVote" type='button' onClick="(location.href='{{route('vote.create')}}')">Criar nova votação</button>
         
         @foreach($votes as $vote)
             <card onClick="(location.href='{{route('vote.show', $vote->id)}}')">
@@ -60,30 +72,10 @@
                         @else
                             <i class="fa-solid fa-calendar-xmark"></i> Encerrado
                         @endif
-
-                        <!-- @if($vote->start_date <= $dateNow && $vote->end_date >= $dateNow)
-                            @if($vote->start_date == $dateNow || $vote->end_date == $dateNow)
-                                @if($vote->start_time <= $timeNow && $vote->end_time >= $timeNow)
-                                    <i class="fa-solid fa-calendar-check"></i> Em andamento
-                                @elseIf($vote->start_time > $timeNow)
-                                    <i class="fa-solid fa-clock"></i> Não iniciado 1
-                                @else
-                                    <i class="fa-solid fa-calendar-xmark"></i> Encerrado
-                                @endif
-                            @else
-                                <i class="fa-solid fa-calendar-check"></i> Em andamento
-                            @endif
-                        @elseIf( $vote->start_date >= $dateNow)
-                            <i class="fa-solid fa-clock"></i> Não iniciado
-                        @else
-                            <i class="fa-solid fa-calendar-xmark"></i> Encerrado
-                        @endif -->
-
                     </div>
-
                 </div>
             </card>
-            <br>
+            
         @endforeach
         <div class="row justify-content-center">
             {{ $votes->links() }}
@@ -103,7 +95,7 @@
             width: 50%;
             height: auto;
             min-height: 100px;
-            margin-bottom: 24px;
+            margin-bottom: 12px;
             border-radius: 10px;
             padding: 24px;
             align-items: center;
@@ -134,15 +126,17 @@
             display: flex;
             align-items: center;
             flex-direction: column;
+            padding-bottom: 24px;
         }
 
-        
-        .container .title {
-            margin-top: 16px;
-            margin-bottom: 16px;
+        .title {
+            margin-top: 32px;
+            margin-bottom: 24px;
+            justify-content: center;
+            display: flex;
         }
 
-        .container button {
+        .container .newVote {
             width: 40%;
             padding: 24px;
             font-weight: 700;
@@ -151,7 +145,7 @@
             color: #FFFFFF;
 
             border-radius: 5px;
-            margin: 12px 0 84px;
+            margin: 12px 0 40px;
             border: none;
 
             cursor: pointer;
